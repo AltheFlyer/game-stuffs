@@ -82,6 +82,7 @@ public class GameScreen implements Screen{
 		game.batch.draw(characterImage, character.x, character.y);
 		game.batch.end();
 		
+		//Character movement
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			character.y += 175 * Gdx.graphics.getDeltaTime();
 		}
@@ -109,7 +110,7 @@ public class GameScreen implements Screen{
 			character.y = 590;
 		}
 		
-		
+		//Spawn new enemy
 		if (TimeUtils.nanoTime() - lastSpawn > 700000000) {
 			spawnEnemy();
 		}
@@ -119,8 +120,8 @@ public class GameScreen implements Screen{
 		
 		while(iter.hasNext()){
 			Enemy enemy = iter.next();
+			//Enemy movement
 			enemy.move(character.x + 5, character.y + 5);
-					
 			//Enemy Shooting
 			bullets.addAll(enemy.attack(character.x, character.y));
 			
@@ -131,11 +132,12 @@ public class GameScreen implements Screen{
 			Bullet bullet = iter1.next();
 			bullet.moveBullet(Gdx.graphics.getDeltaTime());
 			if (bullet.x < 0 || bullet.x > 1000 || bullet.y < 0 || bullet.y > 600) {
+				//Remove if out of bounds
 				iter1.remove();
 			}	
 		}
 		
-		//Bullet-Enemy Collisions
+		//Bullet Collisions
 		Iterator<Enemy> iterEnemy = enemies.iterator();
 		
 		while (iterEnemy.hasNext()) {
@@ -145,9 +147,11 @@ public class GameScreen implements Screen{
 				while (iterBullet.hasNext()) {
 					Bullet bullet = iterBullet.next();
 					if (enemy.hitbox.overlaps(bullet.hitbox) && bullet.friendly) {	
+						//Enemy collisions
 						iterBullet.remove();
 						iterEnemy.remove();
 					} else if (bullet.hitbox.overlaps(character) && !bullet.friendly) {
+						//Player collisions
 						game.setScreen(new MainMenuScreen(game));
 					}
 				}
@@ -204,6 +208,7 @@ public class GameScreen implements Screen{
 		bulletImage.dispose();
 	}
 	
+	//Generate a random enemy
 	private void spawnEnemy() {
 		randomValue = MathUtils.random(1, 3);
 		
@@ -218,15 +223,15 @@ public class GameScreen implements Screen{
 					enemies.add(mach);
 					break;
 		}
-		
 		lastSpawn = TimeUtils.nanoTime();
 	}
 	
+	//Generates player bullets
 	private void spawnBullet(float x, float y, boolean friendly, float offset) {
 		camera.unproject(mousePos.set(Gdx.input.getX(),Gdx.input.getY(),0));
 		
-		Bullet bullet = new Bullet
-				(x + 3,
+		Bullet bullet = new Bullet(
+				x + 3,
 				y + 3,
 				mousePos.x - character.x,
 				mousePos.y - character.y,
