@@ -23,7 +23,7 @@ public class MainMenuScreen implements Screen {
 		camera.setToOrtho(false, 1000, 600);
 		touchPoint = new Vector3();
 		hitbox = new Rectangle();
-		hitbox.set(100, 100, 300, 100);
+		hitbox.set(350, 250, 650, 350);
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class MainMenuScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		game.batch.begin();
-		game.batch.draw(play, 100, 100);
+		game.batch.draw(play, 350, 250);
 		game.batch.end();
 		
 		if (Gdx.input.isTouched()) {
