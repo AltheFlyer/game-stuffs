@@ -245,6 +245,7 @@ public class GameScreen implements Screen{
 		spawnImage.dispose();
 		spawnImage2.dispose();
 		backgroundImage.dispose();
+		render.dispose();
 	}
 	
 	//Generate a random enemy
