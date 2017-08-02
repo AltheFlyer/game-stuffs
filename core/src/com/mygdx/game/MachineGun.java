@@ -32,7 +32,7 @@ public class MachineGun extends Enemy {
 						0
 					);
 					bullets.add(bullet);
-					shotTime = (float) 0.1;
+					shotTime = 0.1f;
 					shotsFired += 1;
 			}
 			
