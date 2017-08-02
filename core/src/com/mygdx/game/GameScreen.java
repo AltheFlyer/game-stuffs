@@ -8,6 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -24,6 +26,7 @@ public class GameScreen implements Screen{
 	private Texture spawnImage2;
 	private Texture backgroundImage;
 	private OrthographicCamera camera;
+	private ShapeRenderer render;
 	private Rectangle character;
 	private Array<Enemy> enemies;
 	private Array<Bullet> bullets;
@@ -62,6 +65,7 @@ public class GameScreen implements Screen{
 		spawnEnemy();
 		
 		mousePos = new Vector3();
+		render = new ShapeRenderer();
 	}
 	
 	@Override
@@ -100,6 +104,13 @@ public class GameScreen implements Screen{
 		//Character
 		game.batch.draw(characterImage, character.x, character.y);
 		game.batch.end();
+		
+		//Draw shapes
+		render.setProjectionMatrix(camera.combined);
+		render.begin(ShapeType.Filled);
+		render.setColor(0.3f, 0.3f, 0.3f, 0.7f);
+		render.box(850, 0, 0, 150, 600, 0);
+		render.end();
 		
 		//Character movement
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
