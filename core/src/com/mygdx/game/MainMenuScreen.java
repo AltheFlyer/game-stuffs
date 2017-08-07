@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+//import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +24,7 @@ public class MainMenuScreen implements Screen {
 		camera.setToOrtho(false, 1000, 600);
 		touchPoint = new Vector3();
 		hitbox = new Rectangle();
-		hitbox.set(350, 250, 650, 350);
+		hitbox.set(350, 250, 300, 100);
 	}
 	
 	@Override
@@ -39,7 +40,11 @@ public class MainMenuScreen implements Screen {
 		camera.update();
 		game.batch.begin();
 		game.batch.draw(play, 350, 250);
+		//game.font.setColor(Color.WHITE);
+		//game.font.draw(game.batch, "Play", 350, 350);
 		game.batch.end();
+		
+		
 		
 		if (Gdx.input.isTouched()) {
 			camera.unproject(touchPoint.set(Gdx.input.getX(),Gdx.input.getY(),0));
@@ -81,3 +86,4 @@ public class MainMenuScreen implements Screen {
 	}
 	
 }
+
