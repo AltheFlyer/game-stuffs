@@ -22,9 +22,10 @@ public class GameScreen implements Screen{
 	
 	private Texture characterImage;
 	private Texture enemyImage;
-	private Texture bulletImage;
-
+	private Texture friendlyBulletImage;
+	private Texture enemyBulletImage;
 	private Texture backgroundImage;
+	
 	private OrthographicCamera camera;
 	private ShapeRenderer render;
 	private Rectangle character;
@@ -41,9 +42,11 @@ public class GameScreen implements Screen{
 	
 	public GameScreen(final ArenaGame game) {
 		this.game = game;
+		
 		characterImage = new Texture("Character.png");
 		enemyImage = new Texture("regular enemy.png");
-		bulletImage = new Texture("FriendlyBullet.png");
+		friendlyBulletImage = new Texture("FriendlyBullet.png");
+		enemyBulletImage = new Texture("EnemyBullet.png");
 		backgroundImage = new Texture("BG.png");
 		
 		camera = new OrthographicCamera();
@@ -54,14 +57,11 @@ public class GameScreen implements Screen{
 		character.y = 100;
 		character.width = 10;
 		character.height = 10;
-		
 		cooldown = 0;
 		playerHealth = 100;
 		
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
-		spawnEnemy();
-		
 		mousePos = new Vector3();
 		render = new ShapeRenderer();
 	}
@@ -78,11 +78,9 @@ public class GameScreen implements Screen{
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
 		camera.update();
-		
-		
-		
-				
+			
 		game.batch.setProjectionMatrix(camera.combined);
 		render.setProjectionMatrix(camera.combined);
 		
@@ -103,17 +101,24 @@ public class GameScreen implements Screen{
 		render.box(850, 0, 0, 150, 600, 0);	
 		render.end();
 		
-		
 		//Draw game objects
 		game.batch.begin();
 		//Enemies
 		for(Enemy enemy: enemies){
 			game.batch.draw(enemyImage, enemy.x ,enemy.y);
 		}
+		
 		//Bullets
-		for (Bullet bullet: bullets){
-			game.batch.draw(bulletImage, bullet.x, bullet.y);
+		for (Bullet bullet: bullets){		
+			if (bullet.isFriendly) {
+				//Friendly
+				game.batch.draw(friendlyBulletImage, bullet.x, bullet.y);
+			} else { 
+				//Enemy
+				game.batch.draw(enemyBulletImage, bullet.x, bullet.y);
+			}
 		}
+		
 		//Character
 		game.batch.draw(characterImage, character.x, character.y);
 		game.batch.end();
@@ -145,7 +150,7 @@ public class GameScreen implements Screen{
 		}
 		
 		//Spawn new enemy
-		if (TimeUtils.nanoTime() - lastSpawn > 700000000) {
+		if (TimeUtils.nanoTime() - lastSpawn > 400000000) {
 			spawnEnemy();
 		}
 		
@@ -181,11 +186,11 @@ public class GameScreen implements Screen{
 				Iterator<Bullet> iterBullet = bullets.iterator();
 				while (iterBullet.hasNext()) {
 					Bullet bullet = iterBullet.next();
-					if (enemy.hitbox.overlaps(bullet.hitbox) && bullet.friendly) {	
+					if (enemy.hitbox.overlaps(bullet.hitbox) && bullet.isFriendly) {	
 						//Enemy collisions
 						iterBullet.remove();
 						iterEnemy.remove();
-					} else if (bullet.hitbox.overlaps(character) && !bullet.friendly) {
+					} else if (bullet.hitbox.overlaps(character) && !bullet.isFriendly) {
 						//Player collisions
 						playerHealth -= 10;
 						System.out.println(playerHealth);
@@ -239,7 +244,8 @@ public class GameScreen implements Screen{
 		// TODO Auto-generated method stub
 		characterImage.dispose();
 		enemyImage.dispose();
-		bulletImage.dispose();
+		friendlyBulletImage.dispose();
+		enemyBulletImage.dispose();
 		backgroundImage.dispose();
 		render.dispose();
 	}
