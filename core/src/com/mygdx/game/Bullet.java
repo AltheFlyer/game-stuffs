@@ -9,11 +9,11 @@ public class Bullet {
 	public float x;
 	public float y;
 	public Vector2 move;
-	public boolean friendly;
+	public boolean isFriendly;
 	public int speed;
 	
 	
-	public Bullet(float startX, float startY, float moveX, float moveY, int moved, boolean isFriendly, float variance){
+	public Bullet(float startX, float startY, float moveX, float moveY, int moved, boolean friendly, float variance){
 		x = startX;
 		y = startY;
 		hitbox = new Rectangle();
@@ -24,7 +24,7 @@ public class Bullet {
 		move = new Vector2();
 		move.x = (float) Math.cos(Math.atan2(moveY, moveX) + variance);
 		move.y = (float) Math.sin(Math.atan2(moveY, moveX) + variance);
-		friendly = isFriendly;
+		isFriendly = friendly;
 		speed = moved;
 	}
 	
