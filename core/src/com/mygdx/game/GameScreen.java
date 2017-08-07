@@ -19,11 +19,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class GameScreen implements Screen{
 	
 	final ArenaGame game;
+	
 	private Texture characterImage;
 	private Texture enemyImage;
 	private Texture bulletImage;
-	private Texture spawnImage;
-	private Texture spawnImage2;
+
 	private Texture backgroundImage;
 	private OrthographicCamera camera;
 	private ShapeRenderer render;
@@ -45,8 +45,6 @@ public class GameScreen implements Screen{
 		enemyImage = new Texture("regular enemy.png");
 		bulletImage = new Texture("FriendlyBullet.png");
 		backgroundImage = new Texture("BG.png");
-		spawnImage = new Texture("spawnArea.png");
-		spawnImage2 = new Texture("spawnArea2.png");
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1000, 600);
@@ -82,17 +80,32 @@ public class GameScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		
-		game.batch.setProjectionMatrix(camera.combined);
 		
-		//Draw everything
+		
+				
+		game.batch.setProjectionMatrix(camera.combined);
+		render.setProjectionMatrix(camera.combined);
+		
 		game.batch.begin();
 		//Background
 		game.batch.draw(backgroundImage, 0, 0);
+		game.batch.end();
+		
+		render.begin(ShapeType.Filled);
 		//Enemy Spawners
-		game.batch.draw(spawnImage, 0, 225);
-		game.batch.draw(spawnImage, 750, 225);
-		game.batch.draw(spawnImage2, 350, 0);
-		game.batch.draw(spawnImage2, 350, 500);
+		render.setColor(0.6f, 0.6f, 0.6f, 1);
+		render.box(0, 225, 0, 100, 150, 0);
+		render.box(750, 225, 0, 100, 150, 0);
+		render.box(350, 0, 0, 150, 100, 0);
+		render.box(350, 500, 0, 150, 100, 0);
+		//Draw sidebar
+		render.setColor(0.3f, 0.3f, 0.3f, 1);
+		render.box(850, 0, 0, 150, 600, 0);	
+		render.end();
+		
+		
+		//Draw game objects
+		game.batch.begin();
 		//Enemies
 		for(Enemy enemy: enemies){
 			game.batch.draw(enemyImage, enemy.x ,enemy.y);
@@ -104,13 +117,6 @@ public class GameScreen implements Screen{
 		//Character
 		game.batch.draw(characterImage, character.x, character.y);
 		game.batch.end();
-		
-		//Draw shapes
-		render.setProjectionMatrix(camera.combined);
-		render.begin(ShapeType.Filled);
-		render.setColor(0.3f, 0.3f, 0.3f, 0.7f);
-		render.box(850, 0, 0, 150, 600, 0);
-		render.end();
 		
 		//Character movement
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -125,8 +131,6 @@ public class GameScreen implements Screen{
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			character.x += 175 * Gdx.graphics.getDeltaTime();
 		}
-		
-		
 		
 		//Keep character onscreen
 		if (character.x < 0) {
@@ -148,6 +152,7 @@ public class GameScreen implements Screen{
 		Iterator<Enemy> iter = enemies.iterator();
 		Iterator<Bullet> iter1 = bullets.iterator();
 		
+		//Enemy cycles
 		while(iter.hasNext()){
 			Enemy enemy = iter.next();
 			//Enemy movement
@@ -196,19 +201,12 @@ public class GameScreen implements Screen{
 			}
 		}
 		
-		
 		//Shooting
 		if (Gdx.input.isTouched() && TimeUtils.nanoTime() - cooldown > 300000000) {
 			spawnBullet(character.x, character.y, true, 0);
 			spawnBullet(character.x, character.y, true, MathUtils.degreesToRadians * MathUtils.random(-15,15));
 			spawnBullet(character.x, character.y, true, MathUtils.degreesToRadians * MathUtils.random(-15,15));
 		}
-		
-		//camera movement
-		/*
-		camera.position.x = character.x;
-		camera.position.y = character.y;
-		*/
 		
 	}
 
@@ -242,8 +240,6 @@ public class GameScreen implements Screen{
 		characterImage.dispose();
 		enemyImage.dispose();
 		bulletImage.dispose();
-		spawnImage.dispose();
-		spawnImage2.dispose();
 		backgroundImage.dispose();
 		render.dispose();
 	}
