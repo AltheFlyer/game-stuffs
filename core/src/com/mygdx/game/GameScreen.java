@@ -25,6 +25,7 @@ public class GameScreen implements Screen{
 	private Texture friendlyBulletImage;
 	private Texture enemyBulletImage;
 	private Texture backgroundImage;
+	private Texture invincibleImage;
 	
 	private OrthographicCamera camera;
 	private ShapeRenderer render;
@@ -38,6 +39,8 @@ public class GameScreen implements Screen{
 	private int playerHealth;
 	private long lastSpawn;
 	private long cooldown;
+	private float invincibility;
+	private float time;
 
 	
 	public GameScreen(final ArenaGame game) {
@@ -48,6 +51,7 @@ public class GameScreen implements Screen{
 		friendlyBulletImage = new Texture("FriendlyBullet.png");
 		enemyBulletImage = new Texture("EnemyBullet.png");
 		backgroundImage = new Texture("BG.png");
+		invincibleImage = new Texture("InvinciblePlayer.png");
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1000, 600);
@@ -58,6 +62,8 @@ public class GameScreen implements Screen{
 		character.width = 10;
 		character.height = 10;
 		cooldown = 0;
+		invincibility = 0;
+		time = 0;
 		playerHealth = 100;
 		
 		enemies = new Array<Enemy>();
@@ -103,6 +109,12 @@ public class GameScreen implements Screen{
 		
 		//Draw game objects
 		game.batch.begin();
+		
+		//Sidebar text
+		game.font.draw(game.batch, "Time survived", 880, 580);
+		game.font.draw(game.batch, String.format("%d:%d", (int) time, (int) ((time % 1) * 1000)), 880, 560);
+		game.font.draw(game.batch, String.format("Health: %d", playerHealth), 880, 520);
+		
 		//Enemies
 		for(Enemy enemy: enemies){
 			game.batch.draw(enemyImage, enemy.x ,enemy.y);
@@ -120,7 +132,11 @@ public class GameScreen implements Screen{
 		}
 		
 		//Character
-		game.batch.draw(characterImage, character.x, character.y);
+		if (invincibility <= 0) {
+			game.batch.draw(characterImage, character.x, character.y);
+		} else {
+			game.batch.draw(invincibleImage, character.x, character.y);
+		}
 		game.batch.end();
 		
 		//Character movement
@@ -190,12 +206,13 @@ public class GameScreen implements Screen{
 						//Enemy collisions
 						iterBullet.remove();
 						iterEnemy.remove();
-					} else if (bullet.hitbox.overlaps(character) && !bullet.isFriendly) {
+					} else if (bullet.hitbox.overlaps(character) && !bullet.isFriendly && invincibility <= 0) {
 						//Player collisions
 						playerHealth -= 10;
 						System.out.println(playerHealth);
 						iterBullet.remove();
-						
+						//Set player invincibility
+						invincibility = 2;
 						if (playerHealth <= 0) {
 							game.setScreen(new MainMenuScreen(game));
 						}
@@ -207,11 +224,19 @@ public class GameScreen implements Screen{
 		}
 		
 		//Shooting
-		if (Gdx.input.isTouched() && TimeUtils.nanoTime() - cooldown > 300000000) {
+		if (Gdx.input.isTouched() && TimeUtils.nanoTime() - cooldown > 150000000) {
 			spawnBullet(character.x, character.y, true, 0);
 			spawnBullet(character.x, character.y, true, MathUtils.degreesToRadians * MathUtils.random(-15,15));
 			spawnBullet(character.x, character.y, true, MathUtils.degreesToRadians * MathUtils.random(-15,15));
 		}
+		
+		//Tick invincibility
+		if (invincibility > 0) {
+			invincibility -= Gdx.graphics.getDeltaTime();
+		}
+		
+		//Increment time passed
+		time += Gdx.graphics.getDeltaTime();
 		
 	}
 
@@ -223,7 +248,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubs
 		
 	}
 
@@ -247,6 +272,7 @@ public class GameScreen implements Screen{
 		friendlyBulletImage.dispose();
 		enemyBulletImage.dispose();
 		backgroundImage.dispose();
+		invincibleImage.dispose();
 		render.dispose();
 	}
 	
@@ -304,7 +330,7 @@ public class GameScreen implements Screen{
 				mousePos.y - character.y,
 				350,
 				friendly,
-				MathUtils.degreesToRadians * MathUtils.random(-2, 2) + offset
+				MathUtils.degreesToRadians * MathUtils.random(-3, 3) + offset
 				);
 	
 		cooldown = TimeUtils.nanoTime();
