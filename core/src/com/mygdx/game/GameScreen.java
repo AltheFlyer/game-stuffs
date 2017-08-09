@@ -310,18 +310,20 @@ public class GameScreen implements Screen{
 				break;
 		}
 				
-		randomValue = MathUtils.random(1, 3);
+		randomValue = MathUtils.random(1, 17);
 		
-		switch (randomValue) {
-			case 1: RegularEnemy enemy = new RegularEnemy(spawnX, spawnY, 0, 0, 0, 13, 13, 100);
-					enemies.add(enemy);
-					break;
-			case 2: TripleShot tri = new TripleShot(spawnX, spawnY, 0, 0, 0, 13, 13, 0);
-					enemies.add(tri);
-					break;
-			case 3: MachineGun mach = new MachineGun(spawnX, spawnY, 0, 0, 0, 13, 13, 0);
-					enemies.add(mach);
-					break;
+		if (isBetween(randomValue, 1, 10)) {
+			RegularEnemy enemy = new RegularEnemy(spawnX, spawnY, 0, 0, 0, 13, 13);
+			enemies.add(enemy);
+		} else if (isBetween(randomValue, 11, 13)) {
+			TripleShot tri = new TripleShot(spawnX, spawnY, 0, 0, 0, 13, 13);
+			enemies.add(tri);
+		} else if (isBetween(randomValue, 14, 16)) {
+			MachineGun mach = new MachineGun(spawnX, spawnY, 0, 0, 0, 13, 13);
+			enemies.add(mach);
+		} else if (isBetween(randomValue, 17, 17)) {
+			SwirlEnemy swirl = new SwirlEnemy(spawnX, spawnY, 0, 0, 0, 13, 13);
+			enemies.add(swirl);
 		}
 		lastSpawn = TimeUtils.nanoTime();
 	}
@@ -345,4 +347,7 @@ public class GameScreen implements Screen{
 		
 	}
 	
+	public boolean isBetween(int x, int lower, int upper) {
+		  return lower <= x && x <= upper;
+	}
 }
