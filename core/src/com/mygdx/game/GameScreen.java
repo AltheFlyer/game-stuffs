@@ -42,7 +42,6 @@ public class GameScreen implements Screen{
 	private float invincibility;
 	private float time;
 
-	
 	public GameScreen(final ArenaGame game) {
 		this.game = game;
 		
@@ -205,7 +204,10 @@ public class GameScreen implements Screen{
 					if (enemy.hitbox.overlaps(bullet.hitbox) && bullet.isFriendly) {	
 						//Enemy collisions
 						iterBullet.remove();
-						iterEnemy.remove();
+						enemy.health -= 35;
+						if (enemy.health <= 0) {
+							iterEnemy.remove();
+						}
 					} else if (bullet.hitbox.overlaps(character) && !bullet.isFriendly && invincibility <= 0) {
 						//Player collisions
 						playerHealth -= 10;
@@ -335,7 +337,7 @@ public class GameScreen implements Screen{
 	
 		cooldown = TimeUtils.nanoTime();
 		bullets.add(bullet);
-		 
+		
 	}
 	
 }
