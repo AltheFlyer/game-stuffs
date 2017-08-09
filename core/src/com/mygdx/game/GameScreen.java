@@ -41,6 +41,7 @@ public class GameScreen implements Screen{
 	private long cooldown;
 	private float invincibility;
 	private float time;
+	private int kills;
 
 	public GameScreen(final ArenaGame game) {
 		this.game = game;
@@ -63,6 +64,7 @@ public class GameScreen implements Screen{
 		cooldown = 0;
 		invincibility = 0;
 		time = 0;
+		kills = 0;
 		playerHealth = 100;
 		
 		enemies = new Array<Enemy>();
@@ -113,6 +115,7 @@ public class GameScreen implements Screen{
 		game.font.draw(game.batch, "Time survived", 880, 580);
 		game.font.draw(game.batch, String.format("%d:%d", (int) time, (int) ((time % 1) * 1000)), 880, 560);
 		game.font.draw(game.batch, String.format("Health: %d", playerHealth), 880, 520);
+		game.font.draw(game.batch, String.format("Kills: %d", kills), 880, 480);
 		
 		//Enemies
 		for(Enemy enemy: enemies){
@@ -196,8 +199,8 @@ public class GameScreen implements Screen{
 		Iterator<Enemy> iterEnemy = enemies.iterator();
 		
 		while (iterEnemy.hasNext()) {
+			Enemy enemy = iterEnemy.next();
 			try {
-				Enemy enemy = iterEnemy.next();
 				Iterator<Bullet> iterBullet = bullets.iterator();
 				while (iterBullet.hasNext()) {
 					Bullet bullet = iterBullet.next();
@@ -205,9 +208,6 @@ public class GameScreen implements Screen{
 						//Enemy collisions
 						iterBullet.remove();
 						enemy.health -= 35;
-						if (enemy.health <= 0) {
-							iterEnemy.remove();
-						}
 					} else if (bullet.hitbox.overlaps(character) && !bullet.isFriendly && invincibility <= 0) {
 						//Player collisions
 						playerHealth -= 10;
@@ -222,6 +222,11 @@ public class GameScreen implements Screen{
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Something went wrong with the arrays");
+			}
+			//Check for dead enemies
+			if (enemy.health <= 0) {
+				iterEnemy.remove();
+				kills += 1;
 			}
 		}
 		
