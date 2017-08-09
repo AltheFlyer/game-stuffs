@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Array;
 public class TripleShot extends Enemy {
 	
 	public TripleShot(float startX, float startY, float toX, float toY, int hp, int height,
-			int width, int moved) {
-		super(startX, startY, toX, toY, 70, height, width, moved, 3);
+			int width) {
+		super(startX, startY, toX, toY, 70, height, width, 0, 3);
 		// TODO Auto-generated constructor stub
 	}
 	
