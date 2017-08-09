@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.Array;
 public class RegularEnemy extends Enemy {
 	
 	public RegularEnemy(float startX, float startY, float toX, float toY, int hp, int height,
-			int width, int speed) {
-		super(startX, startY, toX, toY, 35, height, width, speed, 1);
+			int width) {
+		super(startX, startY, toX, toY, 35, height, width, 100, 1);
 	}
 	
 	public Array<Bullet> attack(float charX, float charY){
