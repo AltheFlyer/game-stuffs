@@ -21,7 +21,6 @@ public class GameScreen implements Screen{
 	final ArenaGame game;
 	
 	private Texture characterImage;
-	private Texture enemyImage;
 	private Texture friendlyBulletImage;
 	private Texture enemyBulletImage;
 	private Texture backgroundImage;
@@ -47,7 +46,6 @@ public class GameScreen implements Screen{
 		this.game = game;
 		
 		characterImage = new Texture("Character.png");
-		enemyImage = new Texture("regular enemy.png");
 		friendlyBulletImage = new Texture("FriendlyBullet.png");
 		enemyBulletImage = new Texture("EnemyBullet.png");
 		backgroundImage = new Texture("BG.png");
@@ -119,7 +117,7 @@ public class GameScreen implements Screen{
 		
 		//Enemies
 		for(Enemy enemy: enemies){
-			game.batch.draw(enemyImage, enemy.x ,enemy.y);
+			game.batch.draw(enemy.sprite, enemy.x ,enemy.y);
 		}
 		
 		//Bullets
@@ -227,6 +225,7 @@ public class GameScreen implements Screen{
 			if (enemy.health <= 0) {
 				iterEnemy.remove();
 				kills += 1;
+				enemy.sprite.dispose();
 			}
 		}
 		
@@ -275,12 +274,14 @@ public class GameScreen implements Screen{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		characterImage.dispose();
-		enemyImage.dispose();
 		friendlyBulletImage.dispose();
 		enemyBulletImage.dispose();
 		backgroundImage.dispose();
 		invincibleImage.dispose();
 		render.dispose();
+		for (Enemy enemy : enemies) {
+			enemy.sprite.dispose();
+		}
 	}
 	
 	//Generate a random enemy
