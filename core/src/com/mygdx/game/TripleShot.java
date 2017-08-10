@@ -8,7 +8,7 @@ public class TripleShot extends Enemy {
 	
 	public TripleShot(float startX, float startY, float toX, float toY, int hp, int height,
 			int width) {
-		super(startX, startY, toX, toY, 70, height, width, 0, 3);
+		super(startX, startY, toX, toY, 70, height, width, 0, 3, "regular enemy.png");
 		// TODO Auto-generated constructor stub
 	}
 	
