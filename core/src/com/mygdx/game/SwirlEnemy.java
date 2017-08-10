@@ -10,7 +10,7 @@ public class SwirlEnemy extends Enemy {
 	
 	public SwirlEnemy(float startX, float startY, float toX, float toY, int hp, int height, 
 			int width) {
-		super(startX, startY, toX, toY, 70, height, width, 50, 0.15f);
+		super(startX, startY, toX, toY, 70, height, width, 50, 0.15f, "regular enemy.png");
 		// TODO Auto-generated constructor stub
 	}
 	
