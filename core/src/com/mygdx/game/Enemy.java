@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -14,6 +15,7 @@ public abstract class Enemy {
 	public float cooldown;
 	public int speed;
 	public float defaultCooldown;
+	public Texture sprite;
 	
 	public Enemy(float startX,
 				 float startY, 
@@ -23,7 +25,8 @@ public abstract class Enemy {
 				 int height,
 				 int width,
 				 int moved,
-				 float shotDelay) {
+				 float shotDelay,
+				 String spr) {
 					movement = new Vector2();
 					hitbox = new Rectangle();
 					x = startX;
@@ -38,6 +41,7 @@ public abstract class Enemy {
 					cooldown = 2;
 					speed = moved;
 					defaultCooldown = shotDelay;
+					sprite = new Texture(spr);
 	}
 	
 	public Array<Bullet> attack(float charX, float charY){
