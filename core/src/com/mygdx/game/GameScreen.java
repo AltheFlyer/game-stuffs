@@ -311,7 +311,7 @@ public class GameScreen implements Screen{
 				break;
 		}
 				
-		randomValue = MathUtils.random(1, 17);
+		randomValue = MathUtils.random(1, 20);
 		
 		if (isBetween(randomValue, 1, 10)) {
 			RegularEnemy enemy = new RegularEnemy(spawnX, spawnY, 0, 0, 0, 13, 13);
@@ -325,6 +325,9 @@ public class GameScreen implements Screen{
 		} else if (isBetween(randomValue, 17, 17)) {
 			SwirlEnemy swirl = new SwirlEnemy(spawnX, spawnY, 0, 0, 0, 13, 13);
 			enemies.add(swirl);
+		} else if (isBetween(randomValue, 18, 20)) {
+			RandomEnemy random = new RandomEnemy(spawnX, spawnY, 0, 0, 0, 13, 13);
+			enemies.add(random);
 		}
 		lastSpawn = TimeUtils.nanoTime();
 	}
