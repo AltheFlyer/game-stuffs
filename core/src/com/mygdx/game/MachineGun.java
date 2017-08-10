@@ -10,7 +10,7 @@ public class MachineGun extends Enemy {
 
 	public MachineGun(float startX, float startY, float toX, float toY, int hp, int height,
 			int width) {
-		super(startX, startY, toX, toY, 35, height, width, 0, 5);
+		super(startX, startY, toX, toY, 35, height, width, 0, 5, "regular enemy.png");
 		shotsFired = 0;
 		shotTime = 1;
 		// TODO Auto-generated constructor stub
