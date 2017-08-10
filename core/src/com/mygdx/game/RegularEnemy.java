@@ -7,7 +7,7 @@ public class RegularEnemy extends Enemy {
 	
 	public RegularEnemy(float startX, float startY, float toX, float toY, int hp, int height,
 			int width) {
-		super(startX, startY, toX, toY, 35, height, width, 100, 1);
+		super(startX, startY, toX, toY, 35, height, width, 100, 1, "regular enemy.png");
 	}
 	
 	public Array<Bullet> attack(float charX, float charY){
